@@ -57,9 +57,11 @@ minified = (subprocess
 	.decode('utf-8')
 	.replace('\uFEFF', r'\uFEFF')
 	.rstrip(';'))
+  
+removeFile(root + 'code.user.js')
 
 with open(root + 'require.js', encoding='utf-8') as file:
-  minified = file.read() + minified
+  minified = file.read() + minified + ';var a=window.autopilot_pp={};a.require=require;a.requirejs=requirejs;a.define=define'
   
 # get metadata from Greasemonkey directives
 with open(root + 'userscript.js', encoding='utf-8') as file:
@@ -118,9 +120,7 @@ pack = base + 'package/' + extension + '/'
 deleteDir(pack)
 createDir(pack)
 
-minified = minified + ';var a=window.autopilot_pp={};a.version="' + version + '";a.require=require;a.requirejs=requirejs;a.define=define'
-
-### build the Greasemonkey script ###
+# build the Greasemonkey script
 
 # don't you just *love* list comprehensions?
 metadata = '\n'.join(['// @' + key.strip() + ' ' + value if key != 'version' else '// @version ' + version for key, value in c]) 

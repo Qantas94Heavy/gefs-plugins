@@ -21,8 +21,21 @@ define(['autopilot/pidcontrols', 'speedconversions'], function (pidControls, spe
       , enable: function () {
           pidControls.climb.reset();
           pidControls.pitch.reset();
+        
           controls.elevatorTrim = controls.rawPitch;
           controls.rawPitch = 0;
+        
+          var startTime = Date.now();
+          var originalTrim = controls.elevatorTrim;
+          var resetTrim = setInterval(function () {
+            var timeSince = Date.now() - startTime;
+            if (timeSince >= 30000) {
+              clearInterval(resetTrim);
+              controls.elevatorTrim = 0;
+            }
+            else controls.elevatorTrim = originalTrim * (1 - timeSince / 30000);
+          }, 50);
+        
           this.isEnabled = true;
         }
       , disable: function () {

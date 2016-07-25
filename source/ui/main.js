@@ -129,12 +129,18 @@ define(['greatcircle', 'autopilot/main', 'icaoairports', 'waypoints', 'ui/apdisc
     enableHeading();
     gc.setLatitude(this.value);
     $(this).val(gc.getLatitude());
+    if (isFinite(gc.getLatitude()) && isFinite(gc.getLongitude())) {
+      $('#Qantas94Heavy-ap-icao > input').val('');
+    }
   });
   
   $('#Qantas94Heavy-ap-gc-lon > input').change(function () {
     enableHeading();
     gc.setLongitude(this.value);
     $(this).val(gc.getLongitude());
+    if (isFinite(gc.getLatitude()) && isFinite(gc.getLongitude())) {
+      $('#Qantas94Heavy-ap-icao > input').val('');
+    }
   });
   
   // allow ICAO airport codes input  
@@ -197,7 +203,7 @@ define(['greatcircle', 'autopilot/main', 'icaoairports', 'waypoints', 'ui/apdisc
       speed.toKias();
     }
     
-    spdDiv.children('input').val(speed.value);
+    $('#Qantas94Heavy-ap-spd').val(speed.value);
   });
   
   function stopPropagation(event) {
