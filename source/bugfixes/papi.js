@@ -49,15 +49,20 @@ define([ 'util' ], function (util) {
 
       // Create new PAPI lights.
       var frame = M33.rotationZ(M33.identity(), runway.headingRad);
-      c = xy2ll(V2.scale(frame[0], 9), runway.threshold1);
-      papiStep = V2.add(runway.threshold1, xy2ll(frame[0], runway.widthMeters / 2 + 15), runway.threshold1); // 9 meters
-      papiStep = V2.add(papiStep, V2.scale(this.stepY, 5));
-      runway.addPapi(papiStep, c);
+      var papiOffset = runway.widthMeters / 2 + 15;
+      var papiStep, papiLocation;
+      
+      papiStep = xy2ll(V2.scale(b[0], 9), runway.threshold1),
+      papiLocation = xy2ll(V2.scale(b[0], papiOffset), runway.threshold1);
+      papiLocation = V2.add(runway.threshold1, papiLocation);
+      papiLocation = V2.add(papiLocation, V2.scale(this.stepY, 5));
+      this.addPapi(papiLocation, papiStep);
 
-      c = xy2ll(V2.scale(frame[0], -9), runway.threshold2);
-      papiStep = V2.add(runway.threshold2, xy2ll(frame[0], -(runway.widthMeters / 2 + 15)), runway.threshold2); // 9 meters
-      papiStep = V2.add(papiStep, V2.scale(this.stepY, -5));
-      runway.addPapi(papiStep, c);
+      papiStep = xy2ll(V2.scale(b[0], -9), runway.threshold2);
+      papiLocation = xy2ll(V2.scale(b[0], -papiOffset), runway.threshold2);
+      papiLocation = V2.add(runway.threshold2, papiLocation);
+      papiLocation = V2.add(papiLocation, V2.scale(this.stepY, -5));
+      this.addPapi(papiLocation, papiStep);
     });
   }
 
